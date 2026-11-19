@@ -1,0 +1,5 @@
+{"id": 1, "cwd": "/home/you/repos/agency-site", "prompt": "check the search console alerts for the agency site, I think there are things to fix", "gold": ["seo", "browser"], "optional": []}
+{"id": 2, "cwd": "/home/you/repos/content", "prompt": "add a ticket to test the new research flow, then generate the two videos, use the motion graphics", "gold": ["create-issue", "video", "motion-graphics"], "optional": []}
+{"id": 3, "cwd": "/home/you/repos/accounting", "prompt": "the invoices are in Downloads, the 48 euro one is paid", "gold": ["invoices"], "optional": []}
+{"id": 4, "cwd": "/home/you", "prompt": "is my display driven by the iGPU or the eGPU?", "gold": [], "optional": []}
+{"id": 5, "cwd": "/home/you/repos/content", "prompt": "where were we on the gumroad product sessions?", "gold": ["recall"], "optional": []}

@@ -1,0 +1,18 @@
+{
+  "always_available": ["recall", "claude-api"],
+  "rules": [
+    {"skill": "seo", "pattern": "\\bseo\\b|search console|\\bgsc\\b|semrush|keywords?|backlinks?|\\brank(ing)?\\b|indexing", "why": "SEO, Search Console"},
+    {"skill": "create-issue", "pattern": "\\btickets?\\b|\\bissues?\\b|gh issue", "why": "GitHub ticket"},
+    {"skill": "browser", "pattern": "\\bbrowser\\b|reddit|twitter|x\\.com|gmail|\\bon (my|the) (account|dashboard)\\b|logged in|cookies?", "why": "a site that needs your session"},
+    {"skill": "video", "pattern": "\\bvideos?\\b|\\bshorts?\\b|\\breels?\\b|montage|\\bedit\\b.{0,20}\\bclip|script for", "why": "video"},
+    {"skill": "motion-graphics", "pattern": "motion|animat|\\bgifs?\\b|lower third|counter", "why": "motion graphic"},
+    {"skill": "website", "pattern": "landing|one ?pager|\\bhero\\b|\\bthe page\\b|responsive|on mobile|deploy the site", "why": "public site"},
+    {"skill": "admin-ui", "pattern": "dashboard|back-?office|\\bux\\b|\\bui\\b|filters?|button", "why": "internal tool UI"},
+    {"skill": "skill-creator", "pattern": "(make|turn).{0,15}(into|a) skill|update (my|the) skills|new skill", "why": "write or edit a skill"},
+    {"skill": "recall", "pattern": "where were we|do you remember|i told you|last time|we already did", "why": "past sessions"},
+    {"skill": "invoices", "pattern": "invoices?|receipts?|expenses?", "cwd": "/accounting\\b", "why": "bookkeeping repo only"}
+  ],
+  "replaces": [
+    {"if": "motion-graphics", "drop": "video", "unless": "voice|script|montage|subtitles?"}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "skill-router",
+  "owner": {"name": "El Mahdi Moubarak", "url": "https://github.com/emoubarak"},
+  "plugins": [
+    {"name": "skill-router", "source": "./", "description": "Make Claude Code load every skill that fits a prompt, measured on your own sessions."}
+  ],
+  "description": "skill-router: Claude Code loads the right skills, all of them, and you can prove it."
+}

@@ -1,0 +1,10 @@
+{
+  "name": "skill-router",
+  "version": "0.1.0",
+  "description": "Make Claude Code load every skill that fits a prompt: rules in your own words, a short reminder, a bench that measures it on your real prompts, and a weekly review that keeps the rules honest.",
+  "author": {"name": "El Mahdi Moubarak", "url": "https://github.com/emoubarak"},
+  "homepage": "https://github.com/emoubarak/claude-skill-router",
+  "repository": "https://github.com/emoubarak/claude-skill-router",
+  "license": "MIT",
+  "keywords": ["skills", "routing", "hooks", "evaluation", "agent-skills"]
+}
