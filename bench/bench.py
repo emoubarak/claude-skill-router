@@ -9,14 +9,18 @@ description, a skillOverrides entry) and compare. Each prompt runs in its own cw
 with --no-session-persistence and guard.py, which denies every action.
 
 gold.jsonl lines: {"id", "cwd", "prompt", "gold": [skills that must load], "optional": [fine either way]}."""
-import argparse, collections, json, os, re, subprocess, tempfile, time
+import argparse, collections, json, os, re, subprocess, sys, tempfile, threading, time
 from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+STOP = threading.Event()  # set on the first usage-limit error: no new run starts after it
+LIMIT = re.compile(r"limit|rate|quota|overloaded", re.I)
 NEUTRAL = set()  # skills loaded unprompted that cost nothing for you (e.g. a memory skill): never counted as extra
 
 
 def run(item, cfg, model, timeout):
+    if STOP.is_set():
+        return dict(item, pred=[], sec=0, err="stopped: usage limit reached")
     log = tempfile.mktemp(prefix="skb-", suffix=".jsonl")
     env = dict(os.environ, SKILL_BENCH_LOG=log, CLAUDE_CONFIG_DIR=cfg)
     settings = json.dumps({"hooks": {"PreToolUse": [{"matcher": "*", "hooks": [
@@ -47,6 +51,8 @@ def run(item, cfg, model, timeout):
             else:
                 reads += re.findall(r"skills/([\w-]+)/SKILL\.md", json.dumps(d["input"]))
         os.unlink(log)
+    if err and LIMIT.search(err):
+        STOP.set()
     return dict(item, pred=sorted(set(skills) | set(reads)), sec=round(time.time() - t0), err=err)
 
 
@@ -70,12 +76,16 @@ if __name__ == "__main__":
     a.add_argument("config"); a.add_argument("gold")
     a.add_argument("--n", type=int, default=4); a.add_argument("--rep", type=int, default=1)
     a.add_argument("--model", default="claude-opus-5-5"); a.add_argument("--timeout", type=int, default=150)
-    a.add_argument("--out")
+    a.add_argument("--out"); a.add_argument("--max-runs", type=int, default=120)
     x = a.parse_args()
     items = [json.loads(l) for l in open(x.gold)] * x.rep
+    if len(items) > x.max_runs:
+        sys.exit(f"{len(items)} runs > --max-runs {x.max_runs}. Every run spends your Claude plan's usage; raise the cap knowingly.")
     with ThreadPoolExecutor(x.n) as ex:
         rows = list(ex.map(lambda it: run(it, os.path.abspath(x.config), x.model, x.timeout), items))
     out = x.out or f"{os.path.basename(os.path.abspath(x.config))}--{os.path.basename(x.gold)}"
     with open(out, "w") as f:
         f.writelines(json.dumps(r, ensure_ascii=False) + "\n" for r in rows)
+    if STOP.is_set():
+        print("STOPPED: usage limit reached, partial results, do not compare")
     print(json.dumps(score(rows), ensure_ascii=False, indent=1))

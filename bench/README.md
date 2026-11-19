@@ -73,6 +73,13 @@ loaded earlier in the session count as misses on both sides.
 
 The hook itself: median 21 ms and about 150 tokens of added context per prompt, measured over the test set.
 
+## Cost
+
+Every replay is a real `claude -p` run on your plan. My full study, about 2,000 runs on Opus with several variants in
+parallel, used up a week of a Max plan's usage on the last day. The scripts now cap a launch at 120 runs
+(`--max-runs`) and stop starting new runs at the first usage-limit error. Tune on a small dev set, run the held-out
+set once per finalist, and keep parallelism low.
+
 ## Caveats
 
 - One user, one language (French), one model. Your gain depends on how far your phrasing is from your descriptions.

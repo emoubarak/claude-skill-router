@@ -9,7 +9,7 @@ session id, and resumed with `claude -p --resume <id> --fork-session`, so Claude
 Only tool calls made after the prompt are logged (by guard.py). Large histories cost tokens: keep them under a few MB."""
 import argparse, json, os, re, subprocess, tempfile, time, uuid
 from concurrent.futures import ThreadPoolExecutor
-from bench import HERE, score
+from bench import HERE, LIMIT, STOP, score
 
 
 def cut(item, cfg):
@@ -43,6 +43,8 @@ def cut(item, cfg):
 
 
 def run(item, cfg, model, timeout):
+    if STOP.is_set():
+        return dict(item, pred=[], sec=0, err="stopped: usage limit reached")
     sid, cwd = cut(item, cfg)
     if not sid:
         return dict(item, pred=[], err="prompt not found in transcript", sec=0)
@@ -71,6 +73,8 @@ def run(item, cfg, model, timeout):
             else:
                 pred.update(re.findall(r"skills/([\w-]+)/SKILL\.md", json.dumps(d["input"])))
         os.unlink(log)
+    if err and LIMIT.search(err):
+        STOP.set()
     return dict(item, pred=sorted(pred), sec=round(time.time() - t0), err=err)
 
 
