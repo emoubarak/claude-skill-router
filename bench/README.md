@@ -66,7 +66,7 @@ The final version (after an independent review fixed the 5-skill cut, duplicates
 fresh set: recall 92.9 %, every needed skill in 74/80, clean negatives 24/30 (most "extra" loads were the tool's own
 project skill while working inside that tool's repo).
 
-**Mid-session** (`milieu.py` in my private bench, same method): the real transcript is cut just before the prompt,
+**Mid-session** (`midsession.py`): the real transcript is cut just before the prompt,
 copied into the isolated config and resumed with `claude -p --resume <id> --fork-session`. 28 prompts (23 needing
 skills): recall 43 % to 80 %, every needed skill in 8/23 to 18/23, clean negatives 5/5 to 4/5. Skills already
 loaded earlier in the session count as misses on both sides.
