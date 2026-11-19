@@ -62,12 +62,19 @@ The last variant on the held-out **test** set, 2 passes each, against the untouc
 On the **fresh** set (80 positives, 30 negatives, drawn after a last round of rule fixes), one pass each: recall
 74.1 % to 90.6 %, every needed skill in 59/80 to 72/80 requests, clean negatives 28/30 to 27/30.
 
+The final version (after an independent review fixed the 5-skill cut, duplicates and pasted text), one pass on the
+fresh set: recall 92.9 %, every needed skill in 74/80, clean negatives 24/30 (most "extra" loads were the tool's own
+project skill while working inside that tool's repo).
+
+**Mid-session** (`milieu.py` in my private bench, same method): the real transcript is cut just before the prompt,
+copied into the isolated config and resumed with `claude -p --resume <id> --fork-session`. 28 prompts (23 needing
+skills): recall 43 % to 80 %, every needed skill in 8/23 to 18/23, clean negatives 5/5 to 4/5. Skills already
+loaded earlier in the session count as misses on both sides.
+
 The hook itself: median 21 ms and about 150 tokens of added context per prompt, measured over the test set.
 
 ## Caveats
 
-- The bench replays first messages only. In a real session the reminder also fires mid-conversation, which this
-  bench does not measure.
 - One user, one language (French), one model. Your gain depends on how far your phrasing is from your descriptions.
 - The replay stops when Claude would act, so a skill Claude loads later in a real session (the ticket skill after
   the bug is found) counts as a miss. Real-world recall is somewhat higher on both sides.

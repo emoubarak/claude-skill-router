@@ -15,8 +15,10 @@ skill-router is a `UserPromptSubmit` hook plus the bench that proved it works:
 | Requests where every needed skill loaded | 52 % | **82 %** |
 | Prompts needing no skill left clean | 99 % | 95 % |
 
-A third set drawn after the last fixes, never used for tuning, gave the same picture: recall 74 % to **91 %**, every
-needed skill in 59/80 to **72/80** requests.
+A third set drawn after the last fixes, never used for tuning, gave the same picture: recall 74 % to **93 %**, every
+needed skill in 59/80 to **74/80** requests (final version, after an independent code review). Replayed **in the
+middle of real sessions** (the transcript cut just before the prompt, then `--resume`), 28 prompts: recall 43 % to
+**80 %**, every needed skill in 8/23 to **18/23**.
 
 Measured with Claude Opus 5.5 in Claude Code 2.1.328, 80 to 95 skills per session depending on the repo (global,
 project and plugin), real prompts from 75 days of work. Labels were proposed by four labelling agents and reviewed in
